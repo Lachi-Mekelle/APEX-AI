@@ -1,0 +1,93 @@
+/* APEX AI Blue Theme */
+:root { --brand:#1e3a8a; --brand-2:#1d4ed8; --brand-3:#60a5fa; }
+.brand-gradient { background: linear-gradient(135deg, var(--brand), var(--brand-2)); }
+.container-narrow { max-width: 1100px; }
+
+/* Global */
+body { background-color: var(--brand); color:#fff; }
+
+/* Force key text elements white by default */
+h1,h2,h3,h4,h5,h6, p, a, span, div, label { color:#fff; }
+a:hover { opacity:.9; }
+
+/* Cards: white for readability */
+.card { border-radius:1rem; box-shadow:0 10px 20px rgba(0,0,0,.08); background:#fff; color:#111827; }
+.card h1,.card h2,.card h3,.card p,.card label,.card span,.card div { color:#111827; }
+
+/* Inputs */
+input,select,textarea { background:#fff; color:#111827; }
+
+/* Buttons */
+.btn-primary { background:#fff; color:var(--brand); border-radius:.75rem; padding:.75rem 1.25rem; font-weight:600; }
+.btn-primary:hover { background:#e0e7ff; }
+.btn-outline { border:1px solid rgba(255,255,255,.4); color:#fff; border-radius:.75rem; padding:.75rem 1.25rem; font-weight:600; }
+.btn-outline:hover { background:rgba(255,255,255,.1); }
+
+/* Footer */
+footer { background:var(--brand); color:#fff; }
+footer, footer p, footer div, footer span, footer a { color:#fff !important; }
+
+/* Program cards blue */
+#training-list article { background: var(--brand-2) !important; color:#fff !important; border-radius:1rem; border:1px solid rgba(255,255,255,.2); box-shadow:none !important; }
+#training-list article h3, #training-list article p, #training-list article div { color:#fff !important; }
+#training-list article a { background:#fff !important; color:var(--brand) !important; font-weight:600; border-radius:.5rem; padding:.5rem 1rem; }
+#training-list article a:hover { background:var(--brand-3) !important; color:#fff !important; }
+
+/* Admin toolbar readable on light bg */
+#dashSection h2, #contactsSection h2, #programsSection h2 { color:#111827 !important; }
+#showRegsBtnTop,#showContactsBtnTop,#showProgramsBtnTop,#showRegsBtn2,#showContactsBtn2,#showProgramsBtn,#logoutBtn { color:#111827 !important; border-color:rgba(0,0,0,.2) !important; background:#fff; }
+
+/* Section heading colors */
+#tracks > h2, #programs > h2 { color: var(--brand-2) !important; }
+
+/* Track card hero images */
+.track-hero{ border:1px solid rgba(0,0,0,0.06); }
+
+
+/* --- Light cards for Upcoming Programs --- */
+#training-list article {
+  background: #ffffff !important;               /* white background */
+  color: #111827 !important;                    /* near-black text */
+  border: 1px solid #e5e7eb !important;         /* light border */
+  box-shadow: 0 1px 2px rgba(0,0,0,.04) !important;
+}
+
+#training-list article h3,
+#training-list article p,
+#training-list article div {
+  color: #111827 !important;                    /* ensure all text is dark */
+}
+
+/* Keep the Register button visible on white cards */
+#training-list article a {
+  background: var(--brand-2) !important;        /* blue button */
+  color: #ffffff !important;
+  font-weight: 600;
+  border-radius: .5rem;
+  padding: .5rem 1rem;
+}
+
+#training-list article a:hover {
+  background: var(--brand) !important;          /* deeper blue on hover */
+  color: #ffffff !important;
+}
+
+/* (Optional) Make the section headings black as well */
+#programs > h2,
+#tracks > h2 {
+  color: #111827 !important;
+}
+
+
+/* Make only the "AI Course Tracks" heading white */
+#tracks > h2 {
+  color: #ffffff !important;
+}
+
+
+/* Make only the "Upcoming Programs" heading white */
+#programs > h2 {
+  color: #ffffff !important;
+}
+
+
