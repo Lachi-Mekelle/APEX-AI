@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact — APEX AI Training</title>
+  <link rel="icon" href="favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="brand-gradient text-white">
+    <div class="mx-auto px-6 py-6 container-narrow">
+      <nav class="flex items-center justify-between">
+        <a href="./" class="flex items-center gap-3">
+          <img src="assets/apexai-logo.png" class="h-10 w-10 rounded-full bg-white p-1" alt="APEX AI logo">
+          <span class="text-xl font-bold tracking-tight">APEX AI Training</span>
+        </a>
+        <div class="flex items-center gap-6">
+          <a class="hover:underline" href="./">Home</a>
+          <a class="hover:underline" href="register.html">Register</a>
+          <a class="hover:underline" href="admin.html">Admin</a>
+          <a class="hover:underline" href="contact.html">Contact</a>
+        </div>
+      </nav>
+      <h1 class="mt-6 text-3xl md:text-4xl font-extrabold">Contact & Suggestions</h1>
+      <p class="text-white/90">Have questions about programs, fees, or partnerships? Send us a message.</p>
+    </div>
+  </header>
+
+  <main class="mx-auto px-6 py-10 container-narrow">
+    <section class="grid md:grid-cols-2 gap-8 items-start">
+      <form id="contactForm" class="bg-white card p-6 grid gap-4">
+        <div>
+          <label class="block text-sm font-medium">Full name</label>
+          <input id="c_name" required class="mt-1 w-full border rounded-lg p-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Email</label>
+          <input id="c_email" type="email" required class="mt-1 w-full border rounded-lg p-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Subject (optional)</label>
+          <input id="c_subject" class="mt-1 w-full border rounded-lg p-2" />
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium">Message / Suggestion</label>
+          <textarea id="c_message" required rows="6" class="mt-1 w-full border rounded-lg p-2"></textarea>
+        </div>
+        <div class="md:col-span-2 flex items-center justify-between">
+          <p id="c_msg" class="text-sm"></p>
+          <button class="btn-primary" type="submit">Send Message</button>
+        </div>
+      </form>
+
+      <aside>
+        <div class="bg-white card p-6">
+          <h2 class="text-xl font-semibold">Reach us</h2>
+          <p class="mt-2 text-gray-600">Email: info@apexai.org</p>
+          <p class="text-gray-600">Phone: +251-9XX-XXX-XXX</p>
+          <p class="text-gray-600">Location: Mekelle, Ethiopia</p>
+          <hr class="my-4">
+          <p class="text-gray-700">We welcome feedback on course content, schedules, scholarships, and partnerships. Your suggestions help us improve the APEX AI experience.</p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="mt-10 border-t border-white/10">
+    <div class="mx-auto px-6 py-8 container-narrow flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-sm">© <span id="year"></span> APEX AI — All rights reserved.</div>
+      <div class="text-sm">Contact: info@apexai.org</div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { API_BASE } from './assets/config.js';
+    const form = document.getElementById('contactForm');
+    const statusEl = document.getElementById('c_msg');
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function setMsg(text, ok=false){
+      statusEl.textContent = text;
+      statusEl.className = ok ? 'text-sm text-emerald-600' : 'text-sm text-red-600';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setMsg('Sending…', true);
+      const payload = {
+        name: document.getElementById('c_name').value,
+        email: document.getElementById('c_email').value,
+        subject: document.getElementById('c_subject').value,
+        message: document.getElementById('c_message').value,
+      };
+      try {
+        const res = await fetch(`${API_BASE}/api/contact`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.error || 'Failed');
+        setMsg('Thanks! We received your message.', true);
+        form.reset();
+      } catch (err) {
+        setMsg(err.message || 'Failed to send.');
+      }
+    });
+  </script>
+</body>
+</html>

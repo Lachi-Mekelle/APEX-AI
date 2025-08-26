@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register — APEX AI Training</title>
+  <link rel="icon" href="favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body class="bg-blue-900 text-white">
+  <header class="brand-gradient text-white">
+    <div class="mx-auto px-6 py-6 container-narrow">
+      <nav class="flex items-center justify-between">
+        <a href="./" class="flex items-center gap-3">
+          <img src="assets/apexai-logo.png" class="h-10 w-10 rounded-full bg-white p-1" alt="APEX AI logo">
+          <span class="text-xl font-bold tracking-tight">APEX AI Training</span>
+        </a>
+        <div class="flex items-center gap-6">
+          <a class="hover:underline" href="./">Home</a>
+          <a class="hover:underline" href="register.html">Register</a>
+          <a class="hover:underline" href="admin.html">Admin</a>
+          <a class="hover:underline" href="contact.html">Contact</a>
+        </div>
+      </nav>
+      <h1 class="mt-6 text-3xl md:text-4xl font-extrabold">Registration</h1>
+    </div>
+  </header>
+
+  <main class="mx-auto px-6 py-10 container-narrow">
+    <form id="regForm" class="bg-white card p-6 grid sm:grid-cols-2 gap-5">
+      <div>
+        <label class="block text-sm font-medium">Training</label>
+        <select id="training_id" required class="mt-1 w-full border rounded-lg p-2">
+          <option value="">Loading...</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">First name</label>
+        <input id="first_name" required class="mt-1 w-full border rounded-lg p-2" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Last name</label>
+        <input id="last_name" required class="mt-1 w-full border rounded-lg p-2" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Email</label>
+        <input id="email" type="email" required class="mt-1 w-full border rounded-lg p-2" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Phone</label>
+        <input id="phone" class="mt-1 w-full border rounded-lg p-2" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Organization</label>
+        <input id="organization" class="mt-1 w-full border rounded-lg p-2" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Role / Title</label>
+        <input id="role" class="mt-1 w-full border rounded-lg p-2" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Experience (years)</label>
+        <input id="experience_years" type="number" min="0" value="0" class="mt-1 w-full border rounded-lg p-2" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Payment method</label>
+        <select id="payment_method" class="mt-1 w-full border rounded-lg p-2">
+          <option value="cash">Cash</option>
+          <option value="bank">Bank Transfer</option>
+          <option value="mobile">Mobile Money</option>
+        </select>
+      </div>
+
+      <div class="sm:col-span-2 flex items-center justify-between mt-2">
+        <p id="msg" class="text-sm"></p>
+        <button class="px-5 py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800">Submit</button>
+      </div>
+    </form>
+  </main>
+
+  <script type="module">
+    import { API_BASE } from './assets/config.js';
+    const trainingSel = document.getElementById('training_id');
+    const form = document.getElementById('regForm');
+    const msg = document.getElementById('msg');
+
+    function setMsg(text, ok=false) {
+      msg.textContent = text;
+      msg.className = ok ? 'text-emerald-600 text-sm' : 'text-red-600 text-sm';
+    }
+
+    async function loadTrainings() {
+      try {
+        const res = await fetch(`${API_BASE}/api/trainings`);
+        const items = await res.json();
+        trainingSel.innerHTML = '<option value="">Select a training…</option>' + items.map(t => {
+          return `<option value="${t.id}">
+              ${t.title} — ${new Date(t.start_date).toLocaleDateString()} (${t.location})
+          </option>`;
+        }).join('');
+      } catch (e) {
+        trainingSel.innerHTML = '<option value="">Failed to load</option>';
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setMsg('Submitting…', true);
+      const payload = {
+        training_id: trainingSel.value,
+        first_name: document.getElementById('first_name').value,
+        last_name: document.getElementById('last_name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        organization: document.getElementById('organization').value,
+        role: document.getElementById('role').value,
+        experience_years: document.getElementById('experience_years').value,
+        payment_method: document.getElementById('payment_method').value,
+      };
+      try {
+        const res = await fetch(`${API_BASE}/api/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed');
+        location.href = 'success.html';
+      } catch (err) {
+        setMsg(err.message || 'Registration failed.');
+      }
+    });
+
+    loadTrainings();
+  </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>APEX AI — Training Programs</title>
+  <link rel="icon" href="favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body class="text-gray-900">
+  <header class="brand-gradient text-white">
+    <div class="mx-auto px-6 py-6 container-narrow">
+      <nav class="flex items-center justify-between">
+        <a href="./" class="flex items-center gap-3">
+          <img src="assets/apexai-logo.png" class="h-10 w-10 rounded-full bg-white p-1" alt="APEX AI logo">
+          <span class="text-xl font-bold tracking-tight">APEX AI Training</span>
+        </a>
+        <div class="flex items-center gap-6">
+          <a class="hover:underline" href="./">Home</a>
+          <a class="hover:underline" href="register.html">Register</a>
+          <a class="hover:underline" href="contact.html">Contact</a>
+          <a class="hover:underline" href="admin.html">Admin</a>
+        </div>
+      </nav>
+
+      <div class="mt-10 md:mt-16 grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">Build Real-World AI Skills</h1>
+          <p class="mt-4 text-lg md:text-xl text-gray-200">Hands-on training programs in ML, RAG systems, computer vision, and deployment — delivered by APEX AI.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="register.html" class="btn-primary">Register Now</a>
+            <a href="#programs" class="btn-outline">Browse Programs</a>
+          </div>
+        </div>
+        <div class="bg-white/5 rounded-2xl p-6">
+          <img src="assets/apexai-logo.png" class="w-40 mx-auto rounded-full bg-white p-2" alt="APEX AI">
+          <p class="mt-4 text-gray-200 text-center">Industry-aligned courses with practical projects and mentorship.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="tracks" class="mx-auto px-6 py-12 container-narrow">
+    <h2 class="text-2xl md:text-3xl font-bold mb-6">AI Course Tracks</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <article class="bg-white card p-6">
+        <img src="assets/track-basic.png" alt="Basic Level — AI & ML illustration" loading="lazy" class="track-hero w-full h-48 object-cover rounded-xl shadow mb-4"/>
+        <h3 class="text-xl font-semibold">Basic Level — AI & Machine Learning</h3>
+        <p class="mt-2 text-gray-700">A friendly start for beginners. Build a solid foundation with Python and core ML concepts, then practice with labs.</p>
+        <ul class="mt-4 list-disc pl-6 text-gray-700 space-y-1">
+          <li>Python essentials for data and ML</li>
+          <li>Supervised &amp; unsupervised learning</li>
+          <li>Model evaluation &amp; improvement</li>
+          <li>Hands-on labs and mini-projects</li>
+        </ul>
+        <div class="mt-5 flex gap-3">
+          <a href="register.html" class="btn-primary">Register</a>
+          <a href="#programs" class="btn-outline">Explore schedule</a>
+        </div>
+      </article>
+
+      <article class="bg-white card p-6">
+        <img src="assets/track-advanced.png" alt="Advanced Level — AI & ML illustration" loading="lazy" class="track-hero w-full h-48 object-cover rounded-xl shadow mb-4"/>
+        <h3 class="text-xl font-semibold">Advanced Level — AI & Machine Learning</h3>
+        <p class="mt-2 text-gray-700">Go deeper into modern AI systems and deployment. Best for participants with prior ML experience.</p>
+        <ul class="mt-4 list-disc pl-6 text-gray-700 space-y-1">
+          <li>Transformers &amp; attention mechanisms</li>
+          <li>RAG systems &amp; vector databases</li>
+          <li>Optimization, MLOps &amp; deployment</li>
+          <li>Capstone project with mentorship</li>
+        </ul>
+        <div class="mt-5 flex gap-3">
+          <a href="register.html" class="btn-primary">Register</a>
+          <a href="#programs" class="btn-outline">Explore schedule</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <main id="programs" class="mx-auto px-6 py-12 container-narrow">
+    <h2 class="text-2xl md:text-3xl font-bold mb-6">Upcoming Programs</h2>
+    <div id="training-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </main>
+
+  <footer class="mt-10 border-t border-white/10">
+    <div class="mx-auto px-6 py-8 container-narrow flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-sm">© <span id="year"></span> APEX AI — All rights reserved.</div>
+      <div class="text-sm">Contact: info@apexai.org</div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { API_BASE } from './assets/config.js';
+    const list = document.getElementById('training-list');
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    async function fetchTrainings() {
+      try {
+        const res = await fetch(`${API_BASE}/api/trainings`);
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error('Invalid response');
+        if (data.length === 0) {
+          list.innerHTML = '<p class="text-gray-200">No programs listed yet. Please check back soon.</p>';
+          return;
+        }
+        list.innerHTML = data.map(t => `
+          <article class="bg-white card p-5 flex flex-col">
+            <h3 class="text-lg font-semibold">${t.title}</h3>
+            <p class="text-sm text-white/90 mt-1">${new Date(t.start_date).toLocaleDateString()} • ${t.location} • ${t.duration_days} day(s)</p>
+            <p class="mt-3 text-sm">${t.description}</p>
+            <div class="mt-auto pt-4 flex items-center justify-between">
+              <div class="text-sm font-semibold">Fee: <span class="text-white">${t.fee} ETB</span></div>
+              <a href="register.html?training_id=${t.id}" class="px-4 py-2 bg-white text-blue-900 rounded-lg text-sm font-semibold hover:bg-blue-200">Register</a>
+            </div>
+          </article>
+        `).join('');
+      } catch (e) {
+        list.innerHTML = `<p class="text-red-200">Failed to load programs. Check API configuration.</p>`;
+        console.error(e);
+      }
+    }
+    fetchTrainings();
+  </script>
+</body>
+</html>
