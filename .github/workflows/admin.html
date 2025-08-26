@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — APEX AI Training</title>
+  <link rel="icon" href="favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body class="bg-blue-900 text-white">
+  <header class="brand-gradient text-white">
+    <div class="mx-auto px-6 py-6 container-narrow">
+      <nav class="flex items-center justify-between">
+        <a href="./" class="flex items-center gap-3">
+          <img src="assets/apexai-logo.png" class="h-10 w-10 rounded-full bg-white p-1" alt="APEX AI logo">
+          <span class="text-xl font-bold tracking-tight">APEX AI Training — Admin</span>
+        </a>
+        <div class="flex items-center gap-6">
+          <a class="hover:underline" href="./">Home</a>
+          <a class="hover:underline" href="register.html">Register</a>
+          <a class="hover:underline" href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mx-auto px-6 py-10 container-narrow">
+    <section id="loginSection" class="bg-white card p-6 max-w-md mx-auto">
+      <h2 class="text-xl font-semibold">Admin Login</h2>
+      <div class="mt-4 grid gap-4">
+        <div>
+          <label class="block text-sm font-medium">Email</label>
+          <input id="adminEmail" class="mt-1 w-full border rounded-lg p-2" value="admin@apexai.org"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Password</label>
+          <input id="adminPass" type="password" class="mt-1 w-full border rounded-lg p-2" value="admin123"/>
+        </div>
+        <div class="flex items-center justify-between">
+          <p id="loginMsg" class="text-sm"></p>
+          <button id="loginBtn" class="px-5 py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800">Login</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="dashSection" class="hidden">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold">Registrations</h2>
+        <div class="flex items-center gap-3">
+          <button id="showRegsBtnTop" class="px-3 py-2 border rounded-lg">Registrations</button>
+          <button id="showContactsBtnTop" class="px-3 py-2 border rounded-lg">Contacts</button>
+          <button id="showProgramsBtnTop" class="px-3 py-2 border rounded-lg">Programs</button>
+          <button id="logoutBtn" class="px-3 py-2 border rounded-lg">Logout</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto bg-white card">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left bg-gray-50">
+              <th class="p-3">Date</th>
+              <th class="p-3">Training</th>
+              <th class="p-3">Name</th>
+              <th class="p-3">Email</th>
+              <th class="p-3">Org/Role</th>
+              <th class="p-3">Experience</th>
+              <th class="p-3">Payment</th>
+              <th class="p-3">Status</th>
+            </tr>
+          </thead>
+          <tbody id="regTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="contactsSection" class="hidden mx-auto px-0">
+      <div class="flex items-center justify-between mb-4 mt-10">
+        <h2 class="text-xl font-semibold">Contact Messages</h2>
+        <div class="flex gap-2">
+          <button id="showRegsBtn" class="px-3 py-2 border rounded-lg">Registrations</button>
+          <button id="showProgramsBtn" class="px-3 py-2 border rounded-lg">Programs</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto bg-white card">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left bg-gray-50">
+              <th class="p-3">Date</th>
+              <th class="p-3">Name</th>
+              <th class="p-3">Email</th>
+              <th class="p-3">Subject</th>
+              <th class="p-3">Message</th>
+            </tr>
+          </thead>
+          <tbody id="adminContactsTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="programsSection" class="hidden">
+      <div class="flex items-center justify-between mb-4 mt-10">
+        <h2 class="text-xl font-semibold">Manage Programs</h2>
+        <div class="flex gap-2">
+          <button id="showRegsBtn2" class="px-3 py-2 border rounded-lg">Registrations</button>
+          <button id="showContactsBtn2" class="px-3 py-2 border rounded-lg">Contacts</button>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <form id="createTrainingForm" class="bg-white card p-6 grid gap-4">
+          <div>
+            <label class="block text-sm font-medium">Slug (unique)</label>
+            <input id="t_slug" required class="mt-1 w-full border rounded-lg p-2" placeholder="e.g., basic-ai-ml-2025" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Title</label>
+            <input id="t_title" required class="mt-1 w-full border rounded-lg p-2" placeholder="Course title" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Start date</label>
+            <input id="t_start" type="date" required class="mt-1 w-full border rounded-lg p-2" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Duration (days)</label>
+            <input id="t_duration" type="number" min="1" value="3" class="mt-1 w-full border rounded-lg p-2" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Location</label>
+            <input id="t_location" class="mt-1 w-full border rounded-lg p-2" value="Mekelle" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Fee (ETB)</label>
+            <input id="t_fee" type="number" step="0.01" value="0" class="mt-1 w-full border rounded-lg p-2" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Capacity</label>
+            <input id="t_capacity" type="number" min="1" value="25" class="mt-1 w-full border rounded-lg p-2" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium">Description</label>
+            <textarea id="t_desc" rows="6" class="mt-1 w-full border rounded-lg p-2" placeholder="Describe the course, topics, and outcomes."></textarea>
+          </div>
+          <div class="md:col-span-2 flex items-center justify-between">
+            <p id="createMsg" class="text-sm"></p>
+            <button type="submit" class="px-4 py-2 bg-gray-900 text-white rounded-lg">Create Program</button>
+          </div>
+        </form>
+
+        <div class="bg-white card p-6 overflow-x-auto">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold">Existing Programs</h3>
+            <button id="refreshPrograms" class="px-3 py-2 border rounded-lg">Refresh</button>
+          </div>
+          <table class="min-w-full text-sm mt-4">
+            <thead>
+              <tr class="text-left bg-gray-50">
+                <th class="p-2">Start</th>
+                <th class="p-2">Title</th>
+                <th class="p-2">Location</th>
+                <th class="p-2">Fee</th>
+                <th class="p-2">Capacity</th>
+                <th class="p-2">Slug</th>
+                <th class="p-2 text-right">Actions</th> <!-- NEW -->
+              </tr>
+            </thead>
+            <tbody id="adminProgramsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { API_BASE } from './assets/config.js';
+    const tokenKey = 'APEXAI_TOKEN';
+    const loginSection = document.getElementById('loginSection');
+    const dashSection = document.getElementById('dashSection');
+    const regTable = document.getElementById('regTable');
+    const loginMsg = document.getElementById('loginMsg');
+    const contactsSection = document.getElementById('contactsSection');
+    const contactsTable = document.getElementById('adminContactsTable');
+    const programsSection = document.getElementById('programsSection');
+    const programsTable = document.getElementById('adminProgramsTable');
+    const createForm = document.getElementById('createTrainingForm');
+    const createMsg = document.getElementById('createMsg');
+
+    function showSection(which) {
+      const isRegs = which === 'regs';
+      const isContacts = which === 'contacts';
+      const isPrograms = which === 'programs';
+      loginSection.classList.add('hidden');
+      dashSection.classList.toggle('hidden', !isRegs);
+      contactsSection.classList.toggle('hidden', !isContacts);
+      programsSection.classList.toggle('hidden', !isPrograms);
+    }
+
+    async function login() {
+      loginMsg.textContent = '';
+      const email = document.getElementById('adminEmail').value;
+      const password = document.getElementById('adminPass').value;
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Login failed');
+        localStorage.setItem(tokenKey, data.access_token);
+        await loadRegs();
+        showSection('regs');
+      } catch (e) {
+        loginMsg.textContent = e.message;
+        loginMsg.className = 'text-sm text-red-600';
+      }
+    }
+
+    async function loadRegs() {
+      const token = localStorage.getItem(tokenKey);
+      if (!token) return;
+      regTable.innerHTML = '<tr><td class="p-3" colspan="8">Loading…</td></tr>';
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/registrations`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const items = await res.json();
+        if (!Array.isArray(items)) throw new Error('Invalid response');
+        regTable.innerHTML = items.map(r => `
+          <tr class="border-t">
+            <td class="p-3 whitespace-nowrap">${new Date(r.created_at).toLocaleString()}</td>
+            <td class="p-3">${r.training_title}</td>
+            <td class="p-3">${r.first_name} ${r.last_name}</td>
+            <td class="p-3">${r.email}</td>
+            <td class="p-3">${r.organization || ''}${r.role ? ' / '+r.role : ''}</td>
+            <td class="p-3">${r.experience_years}</td>
+            <td class="p-3">${r.payment_method}</td>
+            <td class="p-3">
+              <select data-id="${r.id}" class="statusSel border rounded p-1">
+                ${['Pending','Approved','Waitlisted','Rejected'].map(s => `<option ${s===r.status?'selected':''}>${s}</option>`).join('')}
+              </select>
+            </td>
+          </tr>
+        `).join('');
+
+        document.querySelectorAll('.statusSel').forEach(sel => {
+          sel.addEventListener('change', async (e) => {
+            const id = e.target.getAttribute('data-id');
+            const status = e.target.value;
+            await updateStatus(id, status);
+          });
+        });
+      } catch (e) {
+        regTable.innerHTML = `<tr><td class="p-3 text-red-600" colspan="8">Failed to load registrations.</td></tr>`;
+      }
+    }
+
+    async function updateStatus(id, status) {
+      const token = localStorage.getItem(tokenKey);
+      try {
+        await fetch(`${API_BASE}/api/admin/registrations/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ status })
+        });
+      } catch (e) {
+        alert('Failed to update status.');
+      }
+    }
+
+    async function loadContacts(){
+      const token = localStorage.getItem(tokenKey);
+      if (!token) return;
+      contactsTable.innerHTML = '<tr><td class="p-3" colspan="5">Loading…</td></tr>';
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/contacts`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const items = await res.json();
+        if (!Array.isArray(items)) throw new Error('Invalid response');
+        contactsTable.innerHTML = items.map(c => `
+          <tr class="border-t">
+            <td class="p-3 whitespace-nowrap">${new Date(c.created_at).toLocaleString()}</td>
+            <td class="p-3">${c.name}</td>
+            <td class="p-3">${c.email}</td>
+            <td class="p-3">${c.subject || ''}</td>
+            <td class="p-3 max-w-xl">${(c.message || '').replace(/</g, '&lt;')}</td>
+          </tr>
+        `).join('');
+      } catch(e) {
+        contactsTable.innerHTML = `<tr><td class="p-3 text-red-600" colspan="5">Failed to load contacts.</td></tr>`;
+      }
+    }
+
+    async function loadPrograms(){
+      programsTable.innerHTML = '<tr><td class="p-3" colspan="7">Loading…</td></tr>';
+      try {
+        const res = await fetch(`${API_BASE}/api/trainings`);
+        const items = await res.json();
+        if (!Array.isArray(items)) throw new Error('Invalid response');
+        programsTable.innerHTML = items.map(t => `
+          <tr class="border-t">
+            <td class="p-2 whitespace-nowrap">${new Date(t.start_date).toLocaleDateString()}</td>
+            <td class="p-2">${t.title}</td>
+            <td class="p-2">${t.location}</td>
+            <td class="p-2">${t.fee}</td>
+            <td class="p-2">${t.capacity}</td>
+            <td class="p-2 text-gray-500">${t.slug}</td>
+            <td class="p-2 text-right">
+              <button
+                class="delBtn px-3 py-1 border rounded-lg"
+                data-id="${t.id}"
+                data-title="${(t.title || '').replace(/"/g, '&quot;')}">
+                Delete
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch(e) {
+        programsTable.innerHTML = '<tr><td class="p-3 text-red-600" colspan="7">Failed to load programs.</td></tr>';
+      }
+    }
+
+    // ---- Delete workflow (preview -> confirm -> delete) ----
+    async function previewDeleteProgram(id, token) {
+      const res = await fetch(`${API_BASE}/api/admin/trainings/${id}?dry_run=true`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Preview failed');
+      return data;
+    }
+
+    async function performDeleteProgram(id, force, token) {
+      const url = `${API_BASE}/api/admin/trainings/${id}` + (force ? '?force=true' : '');
+      const res = await fetch(url, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Delete failed');
+      return data;
+    }
+
+    async function handleDeleteClick(btn) {
+      const id = btn.getAttribute('data-id');
+      const title = btn.getAttribute('data-title') || 'this program';
+      const token = localStorage.getItem(tokenKey);
+      if (!token) { alert('Please login first.'); return; }
+
+      btn.disabled = true; btn.textContent = 'Deleting…';
+      try {
+        const preview = await previewDeleteProgram(id, token);
+        let msg = `Delete “${title}”?`;
+        if (preview.registrations > 0) {
+          msg += `\n\nThis will also delete ${preview.registrations} registration(s).`;
+        }
+        const proceed = confirm(msg);
+        if (!proceed) return;
+
+        await performDeleteProgram(id, preview.registrations > 0, token);
+        await loadPrograms();
+      } catch (e) {
+        alert(e.message || 'Failed to delete program.');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Delete';
+      }
+    }
+
+    // Global delegation for dynamically-rendered buttons
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.delBtn');
+      if (btn) handleDeleteClick(btn);
+    });
+
+    document.getElementById('loginBtn').addEventListener('click', login);
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+      localStorage.removeItem(tokenKey);
+      location.reload();
+    });
+
+    document.getElementById('showRegsBtnTop')?.addEventListener('click', () => showSection('regs'));
+    document.getElementById('showContactsBtnTop')?.addEventListener('click', () => { showSection('contacts'); loadContacts(); });
+    document.getElementById('showProgramsBtnTop')?.addEventListener('click', () => { showSection('programs'); loadPrograms(); });
+
+    document.getElementById('showRegsBtn')?.addEventListener('click', () => showSection('regs'));
+    document.getElementById('showProgramsBtn')?.addEventListener('click', () => { showSection('programs'); loadPrograms(); });
+    document.getElementById('refreshPrograms')?.addEventListener('click', loadPrograms);
+
+    createForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      createMsg.textContent = 'Creating…';
+      createMsg.className = 'text-sm text-gray-600';
+      const token = localStorage.getItem(tokenKey);
+      const payload = {
+        slug: document.getElementById('t_slug').value,
+        title: document.getElementById('t_title').value,
+        description: document.getElementById('t_desc').value,
+        start_date: document.getElementById('t_start').value,
+        duration_days: document.getElementById('t_duration').value,
+        location: document.getElementById('t_location').value,
+        fee: document.getElementById('t_fee').value,
+        capacity: document.getElementById('t_capacity').value,
+      };
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/trainings`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed');
+        createMsg.textContent = 'Program created successfully.';
+        createMsg.className = 'text-sm text-emerald-600';
+        createForm.reset();
+        loadPrograms();
+      } catch (err) {
+        createMsg.textContent = err.message || 'Failed to create program.';
+        createMsg.className = 'text-sm text-red-600';
+      }
+    });
+
+    // Auto-show dashboard if token exists
+    if (localStorage.getItem(tokenKey)) {
+      showSection('regs');
+      loadRegs();
+    }
+  </script>
+</body>
+</html>
